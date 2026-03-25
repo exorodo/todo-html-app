@@ -79,6 +79,13 @@ h1 {
   padding: 12px 14px;
   border-bottom: 1px solid var(--border);
   background: #fff;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+#todo-list li.completed {
+  text-decoration: line-through;
+  opacity: 0.5;
 }
 </style>
 </head>
@@ -111,6 +118,8 @@ function renderTodos() {
   todos.forEach(todo => {
     const li = document.createElement('li');
     li.textContent = todo.text;
+    if (todo.completed) li.className = 'completed';
+    li.addEventListener('click', () => { todo.completed = !todo.completed; renderTodos(); });
     list.appendChild(li);
   });
 }
