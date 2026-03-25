@@ -34,19 +34,91 @@ h1 {
   margin-bottom: 24px;
 }
 
+#input-area {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+#todo-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text);
+  background: #fff;
+}
+
+#todo-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+#add-btn {
+  padding: 10px 20px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+#add-btn:hover {
+  opacity: 0.9;
+}
+
 #todo-list {
   list-style: none;
+}
+
+#todo-list li {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
 }
 </style>
 </head>
 <body>
 <div class="app">
   <h1>Todo App</h1>
-  <div id="input-area"></div>
+  <div id="input-area">
+    <input type="text" id="todo-input" placeholder="What needs to be done?">
+    <button id="add-btn">Add</button>
+  </div>
   <ul id="todo-list"></ul>
   <div id="filters"></div>
 </div>
 <script>
+let todos = [];
+
+function addTodo() {
+  const input = document.getElementById('todo-input');
+  const text = input.value.trim();
+  if (!text) return;
+  todos.push({ id: Date.now(), text, completed: false });
+  renderTodos();
+  input.value = '';
+  input.focus();
+}
+
+function renderTodos() {
+  const list = document.getElementById('todo-list');
+  list.innerHTML = '';
+  todos.forEach(todo => {
+    const li = document.createElement('li');
+    li.textContent = todo.text;
+    list.appendChild(li);
+  });
+}
+
+document.getElementById('todo-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addTodo();
+});
+document.getElementById('add-btn').addEventListener('click', addTodo);
 </script>
 </body>
 </html>
