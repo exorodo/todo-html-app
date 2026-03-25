@@ -81,6 +81,22 @@ h1 {
   background: #fff;
   cursor: pointer;
   transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 6px;
+}
+
+.delete-btn:hover {
+  color: #dc2626;
 }
 
 #todo-list li.completed {
@@ -117,11 +133,23 @@ function renderTodos() {
   list.innerHTML = '';
   todos.forEach(todo => {
     const li = document.createElement('li');
-    li.textContent = todo.text;
     if (todo.completed) li.className = 'completed';
+    const span = document.createElement('span');
+    span.textContent = todo.text;
+    li.appendChild(span);
+    const del = document.createElement('button');
+    del.className = 'delete-btn';
+    del.textContent = 'x';
+    del.addEventListener('click', e => { e.stopPropagation(); deleteTodo(todo.id); });
+    li.appendChild(del);
     li.addEventListener('click', () => { todo.completed = !todo.completed; renderTodos(); });
     list.appendChild(li);
   });
+}
+
+function deleteTodo(id) {
+  todos = todos.filter(t => t.id !== id);
+  renderTodos();
 }
 
 document.getElementById('todo-input').addEventListener('keydown', e => {
